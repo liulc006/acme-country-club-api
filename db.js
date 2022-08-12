@@ -1,11 +1,11 @@
 const Sequelize = require('sequelize');
-const conn = new Sequelize((process.env.DATABASE_URL, {logging: false}, {
+const conn = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/acme-country-club-db', {
     dialectOptions: {
       ssl: {
         require: true,
         rejectUnauthorized: false
       }
-    }})
+    }}
 );
 
 // conn = new Sequelize('postgres://localhost/acme-country-club-db');
