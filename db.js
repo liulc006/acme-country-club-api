@@ -5,7 +5,7 @@ const conn = new Sequelize(process.env.DATABASE_URL, {
         require: true,
         rejectUnauthorized: false
       }
-    }} || 'postgres://localhost/acme-country-club-db', {logging: false}
+    }} 
 );
 
 const Member = conn.define('member', {
@@ -57,7 +57,7 @@ const syncAndSeed = async () => {
         .catch(err => {
         console.error('Unable to connect to the database:', err);
         });
-        
+
     await conn.sync({force: true});
 
     const [moe, lucy, ethyl, larry] = await Promise.all([
