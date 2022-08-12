@@ -5,8 +5,8 @@ const conn = new Sequelize(process.env.DATABASE_URL, {
         require: true,
         rejectUnauthorized: false
       }
-    }
-  } || 'postgres://localhost/acme-country-club-db', {logging: false});
+    }} || 'postgres://localhost/acme-country-club-db', {logging: false}
+);
 
 const Member = conn.define('member', {
     id:{
@@ -49,6 +49,15 @@ Facility.hasMany(Booking);
 const syncAndSeed = async () => {
     console.log('starting');
 
+    conn
+        .authenticate()
+        .then(() => {
+        console.log('Connection has been established successfully.');
+        })
+        .catch(err => {
+        console.error('Unable to connect to the database:', err);
+        });
+        
     await conn.sync({force: true});
 
     const [moe, lucy, ethyl, larry] = await Promise.all([
