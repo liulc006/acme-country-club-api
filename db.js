@@ -1,9 +1,12 @@
 const Sequelize = require('sequelize');
-const conn = new Sequelize({connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false
+const conn = new Sequelize(process.env.DATABASE_URL, {
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
     }
-} || 'postgres://localhost/acme-country-club-db', {logging: false});
+  } || 'postgres://localhost/acme-country-club-db', {logging: false});
 
 const Member = conn.define('member', {
     id:{
@@ -45,6 +48,7 @@ Facility.hasMany(Booking);
 
 const syncAndSeed = async () => {
     console.log('starting');
+
     await conn.sync({force: true});
 
     const [moe, lucy, ethyl, larry] = await Promise.all([
