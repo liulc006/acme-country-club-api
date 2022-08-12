@@ -5,8 +5,10 @@ const conn = new Sequelize((process.env.DATABASE_URL, {logging: false}, {
         require: true,
         rejectUnauthorized: false
       }
-    }}) || 'postgres://localhost/acme-country-club-db'
+    }})
 );
+
+// conn = new Sequelize('postgres://localhost/acme-country-club-db');
 
 const Member = conn.define('member', {
     id:{
