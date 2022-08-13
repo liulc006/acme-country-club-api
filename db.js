@@ -1,14 +1,26 @@
 const Sequelize = require('sequelize');
-const conn = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/acme-country-club-db', {
+let conn;
+if (process.env.DATABASE_URL){
+    conn = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/acme-country-club-db', {
     dialectOptions: {
       ssl: {
         require: true,
         rejectUnauthorized: false
       }
-    }}
-);
+    }});
+}
+else{
+    conn = new Sequelize('postgres://localhost/acme-country-club-db');
+}
 
-// conn = new Sequelize('postgres://localhost/acme-country-club-db');
+// const conn = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/acme-country-club-db', {
+//     dialectOptions: {
+//       ssl: {
+//         require: true,
+//         rejectUnauthorized: false
+//       }
+//     }}
+// );
 
 const Member = conn.define('member', {
     id:{
@@ -50,15 +62,15 @@ Facility.hasMany(Booking);
 
 const syncAndSeed = async () => {
     console.log('starting');
-
     conn
         .authenticate()
         .then(() => {
-        console.log('Connection has been established successfully.');
+            console.log('Connection has been established successfully.');
         })
         .catch(err => {
-        console.error('Unable to connect to the database:', err);
-        });
+            console.error('Unable to connect to the database:', err);
+        })
+    ;
 
     await conn.sync({force: true});
 
